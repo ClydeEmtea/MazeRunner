@@ -9,6 +9,7 @@ public class Player implements Constants {
     private double angle = Math.PI;
     private final int speed;
     private final double sense;
+    public boolean end = false;
 
     public Player(float x, float y) { // Constructor
         this.x = x;
@@ -70,7 +71,7 @@ public class Player implements Constants {
             }
             for (SpecialBlock specialBlock : specialBlocks) {
                 if (specialBlock.isColliding((float) (this.x + dx), (float) (this.y + dy), radius)) {
-                    specialBlock.setColor(blue);
+                    end = true;
                 }
             }
         }
@@ -80,13 +81,15 @@ public class Player implements Constants {
     }
 
     // Cast rays to render the 3D view
-    public void cast(List<Block> blocks, Graphics g) {
+    // Cast rays to render the 3D view
+    public void cast(List<Block> blocks, List<SpecialBlock> specialBlocks, Graphics g) {
         double startAngle = angle + (Math.PI / 3); // The angle of the first ray
 
         for (int ray = 0; ray < NUM_RAYS; ray++) { // Cast NUM_RAYS rays
             Block hitBlock = null; // The block that the ray hits
+            SpecialBlock hitSpecialBlock = null; // The special block that the ray hits
 
-            for (double depth = 0; depth < MAX_DEPTH; depth++) { // Cast the ray until it hits a block
+            for (double depth = 0; depth < MAX_DEPTH; depth++) { // Cast the ray until it hits a block or special block
                 double targetX = this.x - (depth * Math.sin(startAngle)); // The x coordinate of the target
                 double targetY = this.y + (depth * Math.cos(startAngle)); // The y coordinate of the target
 
@@ -97,19 +100,29 @@ public class Player implements Constants {
                         break;
                     }
                 }
-                if (hitBlock != null) { // If the ray hits a block, render the 3D view
+
+                for (SpecialBlock specialBlock : specialBlocks) { // Check if the ray hits a special block
+                    if (specialBlock.x <= targetX + radius && targetX + radius <= specialBlock.x + SIZE &&
+                            specialBlock.y <= targetY + radius && targetY + radius <= specialBlock.y + SIZE) {
+                        hitSpecialBlock = specialBlock;
+                        break;
+                    }
+                }
+
+                if (hitBlock != null || hitSpecialBlock != null) { // If the ray hits a block or special block, render the 3D view
                     int color = 255 - (int) (depth);
+
                     if (color <= 0) {
                         color = 0;
                     }
 
-                    depth *= Math.cos(this.angle - startAngle); // Correct the fisheye effect
+                    depth *= (Math.cos(this.angle - startAngle)); // Correct the fisheye effect
                     if (depth == 0) {
                         depth = 0.001;
                     }
 
                     int height = (int) ((HEIGHT / depth) * Math.cos(startAngle - this.angle)
-                            * 75); // The height of the wall
+                            * 50); // The height of the wall
                     if (height > HEIGHT) {
                         height = HEIGHT;
                     }
@@ -120,7 +133,12 @@ public class Player implements Constants {
                     int rectWidth = (WIDTH / NUM_RAYS + 1);
                     int rectHeight = height;
 
-                    g.setColor(new Color(0, color, 0));
+                    if (hitBlock != null) {
+                        g.setColor(new Color(0, color, 0));
+                    } else {
+                        g.setColor(new Color(0, color, color));
+                    }
+
                     g.fillRect(rectX, rectY, rectWidth, rectHeight);
 
                     break;
@@ -130,4 +148,5 @@ public class Player implements Constants {
             startAngle += Math.PI / (NUM_RAYS * 3); // Increment the angle of the next ray
         }
     }
+
 }

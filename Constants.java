@@ -13,11 +13,9 @@ public interface Constants {
     Color red = new Color(255, 0, 0);
     Color yellow = new Color(255, 255, 0);
     Color grey = new Color(128, 128, 128);
-    Color blue = new Color(0, 0, 255);
     Color green = new Color(0, 100, 0);
 
-    int[][] MAP = createMap(HEIGHT / SIZE, HEIGHT / SIZE);
-    int MAX_DEPTH = MAP.length * SIZE / 2;
+    int MAX_DEPTH = (HEIGHT / SIZE) * SIZE / 2;
 
 
     static int[][] createMap(int height, int width) {

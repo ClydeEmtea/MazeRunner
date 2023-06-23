@@ -19,6 +19,7 @@ public class App extends JPanel implements ActionListener, Constants {
     List<Block> blocks;
     List<SpecialBlock> specialBlocks;
     public Player player;
+    int[][] map;
 
     // Starts the timer and creates the map
     public void start() {
@@ -27,6 +28,7 @@ public class App extends JPanel implements ActionListener, Constants {
         counter = new Counter(Constants.WIDTH / 10, Constants.HEIGHT - Constants.HEIGHT / 2);
         blocks = new ArrayList<>();
         specialBlocks = new ArrayList<>();
+        map = Constants.createMap(Constants.HEIGHT / SIZE, Constants.HEIGHT / SIZE);
         createMap();
         player = new Player(specialBlocks.get(1).x + (float) Constants.SIZE / 2,
                 specialBlocks.get(1).y + (float) Constants.SIZE / 2);
@@ -35,19 +37,19 @@ public class App extends JPanel implements ActionListener, Constants {
     // Creates the map
     public void createMap() {
 
-         for (int i = -1; i < Constants.MAP.length; i++) {
-            for (int j = -1; j < Constants.MAP.length; j++) {
-                if (i == -1 || j == -1 || i == Constants.MAP.length - 1 || j == Constants.MAP.length - 1) {
+         for (int i = -1; i < map.length; i++) {
+            for (int j = -1; j < map.length; j++) {
+                if (i == -1 || j == -1 || i == map.length - 1 || j == map.length - 1) {
                     blocks.add(new Block(j, i));
                 }
             }
         }
-        for (int i = 0; i < Constants.MAP.length; i++) {
-            for (int j = 0; j < Constants.MAP[i].length; j++) {
-                if (Constants.MAP[i][j] == 1) {
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                if (map[i][j] == 1) {
                     blocks.add(new Block(j, i));
                 }
-                if (Constants.MAP[i][j] == 2) {
+                if (map[i][j] == 2) {
                     specialBlocks.add(new SpecialBlock(j, i));
                 }
             }
@@ -70,7 +72,7 @@ public class App extends JPanel implements ActionListener, Constants {
 
     // Draws the map, the player, rays and moves the player
     public void draw(Graphics g) {
-        player.cast(blocks, g);
+        player.cast(blocks, specialBlocks.subList(0, 1),g);
         if (mkl.space && counter.count > 0) {
             drawMap(g);
             player.draw(g);
@@ -83,6 +85,17 @@ public class App extends JPanel implements ActionListener, Constants {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         repaint();
-        if (player != null) player.move(blocks, specialBlocks, mkl);
+        if (player != null) player.move(blocks, specialBlocks.subList(0,1), mkl);
+        if (player != null && player.end) {
+            timer.stop();
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            frame.remove(this);
+            EndMenu endMenu = new EndMenu();
+            frame.add(endMenu);
+            frame.pack();
+            frame.setVisible(true);
+            frame.setLocationRelativeTo(null);
+            endMenu.requestFocus(); // Set focus on the MainMenu class or its parent component
+        }
     }
 }

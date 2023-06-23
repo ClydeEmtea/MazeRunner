@@ -10,6 +10,7 @@ public class MyKeyListener implements KeyListener {
     public boolean rotateLeft = false;
     public boolean rotateRight = false;
     public boolean space = false;
+    public boolean enter = false;
 
 
     @Override
@@ -22,6 +23,7 @@ public class MyKeyListener implements KeyListener {
             case KeyEvent.VK_LEFT -> rotateLeft = true;
             case KeyEvent.VK_RIGHT -> rotateRight = true;
             case KeyEvent.VK_SPACE -> space = true;
+            case KeyEvent.VK_ENTER -> enter = true;
         }
     }
     @Override
