@@ -20,6 +20,7 @@ public class Counter implements Constants {
         g.setColor(red);
         g.fillRect(this.x, this.y, width, height);
         g.setColor(green);
-        g.fillRect(this.x, this.y + height - (int) (height * ((double) count / COUNTDOWN)), width, (int) (height * ((double) count / COUNTDOWN)));
+        g.fillRect(this.x, this.y + height - (int) (height * ((double) count / COUNTDOWN)),
+                width, (int) (height * ((double) count / COUNTDOWN)));
     }
 }

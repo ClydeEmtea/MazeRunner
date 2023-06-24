@@ -23,8 +23,4 @@ public class SpecialBlock implements Constants {
                 this.y <= y + radius * 2 && y <= (this.y + SIZE));
     }
 
-    // Getters and setters
-    public void setColor(Color color) {
-        this.color = color;
-    }
 }

@@ -109,7 +109,8 @@ public class Player implements Constants {
                     }
                 }
 
-                if (hitBlock != null || hitSpecialBlock != null) { // If the ray hits a block or special block, render the 3D view
+                // If the ray hits a block or special block, render the 3D view
+                if (hitBlock != null || hitSpecialBlock != null) {
                     int color = 255 - (int) (depth);
 
                     if (color <= 0) {
