@@ -80,6 +80,4 @@ public interface Constants {
             array[i] = temp;
         }
     }
-
-
 }

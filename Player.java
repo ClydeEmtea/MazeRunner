@@ -83,7 +83,6 @@ public class Player implements Constants {
     }
 
     // Cast rays to render the 3D view
-    // Cast rays to render the 3D view
     public void cast(List<Block> blocks, List<SpecialBlock> specialBlocks, Graphics g) {
         double startAngle = angle + (Math.PI / 3); // The angle of the first ray
 
@@ -120,7 +119,7 @@ public class Player implements Constants {
                         color = 0;
                     }
 
-                    depth *= (Math.cos(this.angle - startAngle)); // Correct the fisheye effect
+                    depth *= (Math.cos(this.angle - startAngle) * 1.1); // Correct the fisheye effect
                     if (depth == 0) {
                         depth = 0.001;
                     }
@@ -151,7 +150,6 @@ public class Player implements Constants {
 
                     break;
                 }
-
             }
             startAngle += Math.PI / (NUM_RAYS * 3); // Increment the angle of the next ray
         }
