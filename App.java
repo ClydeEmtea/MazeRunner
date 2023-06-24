@@ -20,8 +20,11 @@ public class App extends JPanel implements ActionListener, Constants {
     List<SpecialBlock> specialBlocks;
     public Player player;
     int[][] map;
+    public long start;
+    public long end;
+    public float time;
 
-    // Starts the timer and creates the map
+    // Starts the game and initializes variables and objects to their default values and states
     public void start() {
         timer = new Timer(DELAY, this);
         timer.start();
@@ -32,6 +35,7 @@ public class App extends JPanel implements ActionListener, Constants {
         createMap();
         player = new Player(specialBlocks.get(1).x + (float) Constants.SIZE / 2,
                 specialBlocks.get(1).y + (float) Constants.SIZE / 2);
+        start = System.currentTimeMillis();
     }
 
     // Creates the map
@@ -85,17 +89,25 @@ public class App extends JPanel implements ActionListener, Constants {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         repaint();
+        end = System.currentTimeMillis();
         if (player != null) player.move(blocks, specialBlocks.subList(0,1), mkl);
+
+        // If the player has reached the end of the map, stop the timer and display the end menu
         if (player != null && player.end) {
+            time = (end - start) / 1000F;
             timer.stop();
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
             frame.remove(this);
-            EndMenu endMenu = new EndMenu();
+            EndMenu endMenu = new EndMenu(time, player.victory);
             frame.add(endMenu);
             frame.pack();
             frame.setVisible(true);
             frame.setLocationRelativeTo(null);
             endMenu.requestFocus(); // Set focus on the MainMenu class or its parent component
+        }
+        // If the player has run out of time, stop the timer and display the end menu
+        if (player != null && end - start > 100000) {
+            player.end = true;
         }
     }
 }

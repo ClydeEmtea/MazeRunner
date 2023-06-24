@@ -10,6 +10,7 @@ public class Player implements Constants {
     private final int speed;
     private final double sense;
     public boolean end = false;
+    public boolean victory = false;
 
     public Player(float x, float y) { // Constructor
         this.x = x;
@@ -72,6 +73,7 @@ public class Player implements Constants {
             for (SpecialBlock specialBlock : specialBlocks) {
                 if (specialBlock.isColliding((float) (this.x + dx), (float) (this.y + dy), radius)) {
                     end = true;
+                    victory = true;
                 }
             }
         }
@@ -89,7 +91,8 @@ public class Player implements Constants {
             Block hitBlock = null; // The block that the ray hits
             SpecialBlock hitSpecialBlock = null; // The special block that the ray hits
 
-            for (double depth = 0; depth < MAX_DEPTH; depth++) { // Cast the ray until it hits a block or special block
+            // Cast the ray until it hits a block or special block
+            for (double depth = 0; depth < MAX_DEPTH; depth++) {
                 double targetX = this.x - (depth * Math.sin(startAngle)); // The x coordinate of the target
                 double targetY = this.y + (depth * Math.cos(startAngle)); // The y coordinate of the target
 
@@ -111,7 +114,7 @@ public class Player implements Constants {
 
                 // If the ray hits a block or special block, render the 3D view
                 if (hitBlock != null || hitSpecialBlock != null) {
-                    int color = 255 - (int) (depth);
+                    int color = 255 - (int) (depth * 1.5);
 
                     if (color <= 0) {
                         color = 0;
@@ -135,8 +138,12 @@ public class Player implements Constants {
                     int rectHeight = height;
 
                     if (hitBlock != null) {
-                        g.setColor(new Color(0, color, 0));
+                        g.setColor(new Color(color, color, color));
                     } else {
+                        color *= 2;
+                        if (color > 255) {
+                            color = 255;
+                        }
                         g.setColor(new Color(0, color, color));
                     }
 

@@ -4,7 +4,7 @@ public class SpecialBlock implements Constants {
     // x and y are the coordinates of the top left corner of the block
     public final int x;
     public final int y;
-    public Color color = yellow;
+    public Color color = turquoise;
 
     public SpecialBlock(int x, int y) { // Constructor
         this.x = x * SIZE;

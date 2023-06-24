@@ -8,16 +8,17 @@ public interface Constants {
     int HEIGHT = 800;
     int SIZE = 40;
     int DELAY = 20;
-    int NUM_RAYS = 700;
+    int NUM_RAYS = 500;
     int COUNTDOWN = 500;
     Color red = new Color(255, 0, 0);
     Color yellow = new Color(255, 255, 0);
-    Color grey = new Color(128, 128, 128);
+    Color turquoise = new Color(0, 255, 255);
     Color green = new Color(0, 100, 0);
 
-    int MAX_DEPTH = (HEIGHT / SIZE) * SIZE / 2;
+    int MAX_DEPTH = (int) (255 / 1.5);
 
 
+    // Method that creates a maze using the recursive backtracking algorithm
     static int[][] createMap(int height, int width) {
         int[][] maze = new int[height][width];
 
@@ -69,6 +70,7 @@ public interface Constants {
         }
     }
 
+    // Method that shuffles a 2D array
     static void shuffleArray(int[][] array) {
         Random random = new Random();
         for (int i = array.length - 1; i > 0; i--) {
